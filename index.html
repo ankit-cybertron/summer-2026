@@ -270,6 +270,52 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
 .toggle-switch input:checked + .toggle-slider{background:var(--green);}
 .toggle-switch input:checked + .toggle-slider::before{transform:translateX(18px);}
 
+
+/* CAREER TARGETS */
+.tier-header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--r);margin-bottom:10px;border:1px solid var(--border);}
+.tier-badge{font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.tier-1 .tier-badge{background:linear-gradient(135deg,#f0a500,#e86b4a);color:white;}
+.tier-2 .tier-badge{background:var(--blue);color:white;}
+.tier-3 .tier-badge{background:var(--green);color:white;}
+.tier-1{border-color:#f0a50066;background:linear-gradient(135deg,#fdf6ed,#fef0ed);}
+.tier-2{border-color:var(--blue-bg);background:var(--blue-bg);}
+.tier-3{border-color:var(--green-bg);background:var(--green-bg);}
+@media(prefers-color-scheme:dark){
+  .tier-1{background:#2a1f0e;}.tier-2{background:var(--blue-bg);}.tier-3{background:var(--green-bg);}
+}
+.company-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+.company-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;box-shadow:var(--sh);transition:border-color .15s;}
+.company-card:hover{border-color:var(--border2);}
+.company-card.tracked{border-color:var(--green);}
+.company-name{font-size:14px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.company-lpa{font-family:var(--mono);font-size:11px;font-weight:600;}
+.company-fit{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.4;}
+.company-roles{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+.role-tag{font-size:10px;padding:2px 7px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);}
+.company-needs{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5;}
+.stars{color:#f0a500;font-size:13px;letter-spacing:-1px;}
+.career-roadmap-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.career-roadmap-step:last-child{border-bottom:none;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--text);color:var(--bg);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-body{flex:1;}
+.step-title{font-size:13px;font-weight:600;margin-bottom:2px;}
+.step-detail{font-size:11px;color:var(--muted);line-height:1.5;}
+.skills-needed{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.skill-chip{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;}
+.chip-must{background:var(--red-bg);color:var(--red);border:1px solid var(--red);}
+.chip-good{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber);}
+.chip-nice{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue);}
+.skill-gap-bar{margin-bottom:8px;}
+.skill-gap-meta{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;}
+.application-tracker{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;gap:10px;}
+.app-status{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;white-space:nowrap;}
+.status-target{background:var(--surface2);color:var(--muted);}
+.status-applied{background:var(--blue-bg);color:var(--blue);}
+.status-oa{background:var(--amber-bg);color:var(--amber);}
+.status-interview{background:var(--purple-bg);color:var(--purple);}
+.status-offer{background:var(--green-bg);color:var(--green);}
+.status-rejected{background:var(--red-bg);color:var(--red);}
+
 </style>
 </head>
 <body>
@@ -366,6 +412,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14
     <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
     Amazon prep
     <span class="nav-badge" id="badge-lp">0</span>
+  </div>
+  <div class="nav-item" onclick="go('career',this)">
+    <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    Career Targets
   </div>
   <div class="nav-item" onclick="go('striver',this)">
     <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
@@ -617,14 +667,14 @@ function closeModal(e){if(e&&e.target!==document.getElementById('modal-bg'))retu
 document.getElementById('modal-ok').onclick=()=>{if(_mok)_mok();};
 
 /* ── NAV ── */
-const PAGE_NAMES={now:'Right now',striver:'Striver A2Z Sheet',settings:'Settings & Customise',overview:'Overview',log:'Daily log',schedule:'Daily schedule',dsa:'DSA curriculum',cpp:'C++ concepts',resources:'Resources',comm:'Communication',amazon:'Amazon prep',companies:'Company Qs',milestones:'Milestones'};
+const PAGE_NAMES={now:'Right now',career:'Career Targets & Roadmap',striver:'Striver A2Z Sheet',settings:'Settings & Customise',overview:'Overview',log:'Daily log',schedule:'Daily schedule',dsa:'DSA curriculum',cpp:'C++ concepts',resources:'Resources',comm:'Communication',amazon:'Amazon prep',companies:'Company Qs',milestones:'Milestones'};
 function go(page,el){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   (el||document.querySelector(`[onclick*="'${page}'"]`))?.classList.add('active');
   document.getElementById('page-title').textContent=PAGE_NAMES[page]||page;
   document.getElementById('topbar-right').innerHTML='';
   const c=document.getElementById('content');c.innerHTML='';
-  ({now,overview,log,schedule,dsa,cpp,resources,comm,amazon,companies,milestones,calendar,striver,settings})[page]?.(c);
+  ({now,overview,log,schedule,dsa,cpp,resources,comm,amazon,companies,milestones,calendar,striver,settings,career})[page]?.(c);
   updateBadges();
   if(window.innerWidth<=620)closeSb();
 }
@@ -930,27 +980,81 @@ function dsa(c){
     c.appendChild(wrap);
   });
 
-  // Custom problems
+  // Custom problems — grouped by week
   const custom=S.get('custom_problems',[]);
   if(custom.length){
+    // group by week
+    const byWeek={};
+    custom.forEach((p,i)=>{const w=p.week||1;if(!byWeek[w])byWeek[w]=[];byWeek[w].push({...p,idx:i});});
     const cc=document.createElement('div');cc.className='card';
     cc.innerHTML='<div class="card-hd"><div class="card-title">My added problems</div></div>';
-    const ul2=document.createElement('ul');ul2.className='cl';
-    custom.forEach((p,i)=>{
-      const li=document.createElement('li');li.className='cl-item'+(p.done?' done':'');
-      li.innerHTML=`<div class="cl-cb" onclick="event.stopPropagation();toggleCustomP(${i},this,event)">${p.done?ck():''}</div><div style="flex:1"><span class="cl-text">${p.text}</span>${p.note?`<span class="cl-note">${p.note}</span>`:''}</div><button class="btn-icon" onclick="event.stopPropagation();delCustomP(${i})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>`;
-      ul2.appendChild(li);
+    Object.keys(byWeek).sort((a,b)=>a-b).forEach(wk=>{
+      const wkDone=byWeek[wk].filter(p=>p.done).length;
+      cc.innerHTML+=`<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:8px 0 4px">Week ${wk} — ${wkDone}/${byWeek[wk].length} solved</div>`;
+      byWeek[wk].forEach(p=>{
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:flex-start;gap:9px;padding:7px 10px;border-radius:var(--rs);border:1px solid var(--border);margin-bottom:5px;background:var(--surface);'+(p.done?'opacity:.6;':'');
+        row.innerHTML=`
+          <div class="cl-cb" style="width:17px;height:17px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;${p.done?'background:var(--text);border-color:var(--text);':''}" onclick="toggleCustomP(${p.idx},this)">${p.done?ck():''}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:500;${p.done?'text-decoration:line-through;color:var(--muted);':''}">${p.text}</div>
+            ${p.note?`<div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px">${p.note}</div>`:''}
+            ${p.link?`<a href="${p.link}" target="_blank" onclick="event.stopPropagation()" style="font-size:11px;color:var(--blue);text-decoration:none;margin-top:3px;display:inline-block">${p.link.replace('https://','').split('/').slice(0,4).join('/')} ↗</a>`:''}
+          </div>
+          <button class="btn-icon" onclick="delCustomP(${p.idx})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>`;
+        cc.appendChild(row);
+      });
     });
-    cc.appendChild(ul2);c.appendChild(cc);
+    c.appendChild(cc);
+    // Update overall progress bar to include custom problems
+    const customDone=custom.filter(p=>p.done).length;
+    const newDone=done+customDone;
+    const newTotal=total+custom.length;
+    document.getElementById('lc-prog-lbl').textContent=newDone+'/'+newTotal+' ('+custom.length+' custom)';
+    document.getElementById('lc-prog-bar').style.width=(newDone/newTotal*100)+'%';
   }
 }
 function toggleTopic(id,hd){const body=document.getElementById('tb-'+id);const chev=hd.querySelector('.chev');const col=body.classList.toggle('collapsed');chev.classList.toggle('open',!col);const s=S.get('dsa_open');s[id]=!col;S.set('dsa_open',s);}
-function addCustomProblem(){openModal('Add problem',`<div class="fg"><label>Problem (LC number + name)</label><input id="cp-t" placeholder="#300 Longest Increasing Subsequence — M"></div><div class="fg"><label>Pattern / note (optional)</label><input id="cp-n" placeholder="DP — dp[i] = max LIS ending at i"></div>`,()=>{
-  const t=document.getElementById('cp-t').value.trim();if(!t)return toast('Enter problem name');
-  const arr=S.get('custom_problems',[]);arr.push({text:t,note:document.getElementById('cp-n').value.trim(),done:false});S.set('custom_problems',arr);
-  document.getElementById('modal-bg').classList.remove('open');toast('Added ✓');dsa(document.getElementById('content'));
-},'Add');}
-function toggleCustomP(i,cbEl,e){e&&e.stopPropagation();const arr=S.get('custom_problems',[]);arr[i].done=!arr[i].done;S.set('custom_problems',arr);cbEl.innerHTML=arr[i].done?ck():'';cbEl.closest('.cl-item').classList.toggle('done',arr[i].done);}
+function addCustomProblem(){
+  const wk=Math.max(1,Math.min(8,getWeekNumber(new Date())));
+  openModal('Add problem',`
+    <div class="fg"><label>Problem name / LC number</label><input id="cp-t" placeholder="#300 Longest Increasing Subsequence — M"></div>
+    <div class="fg"><label>LeetCode link (optional)</label><input id="cp-link" placeholder="https://leetcode.com/problems/..."></div>
+    <div class="fg"><label>Pattern / note (optional)</label><input id="cp-n" placeholder="DP — dp[i] = max LIS ending at i"></div>
+    <div class="fg"><label>Add to week</label><select id="cp-wk">${[1,2,3,4,5,6,7,8].map(w=>`<option value="${w}" ${w===wk?'selected':''}>${w===wk?'Week '+w+' (current)':'Week '+w}</option>`).join('')}</select></div>
+  `,()=>{
+    const t=document.getElementById('cp-t').value.trim();
+    if(!t)return toast('Enter problem name');
+    const link=document.getElementById('cp-link').value.trim();
+    const note=document.getElementById('cp-n').value.trim();
+    const weekNum=parseInt(document.getElementById('cp-wk').value)||wk;
+    const arr=S.get('custom_problems',[]);
+    arr.push({text:t,link,note,done:false,week:weekNum,addedAt:Date.now()});
+    S.set('custom_problems',arr);
+    document.getElementById('modal-bg').classList.remove('open');
+    toast('Added to Week '+weekNum+' ✓');
+    dsa(document.getElementById('content'));
+  },'Add');
+}
+function toggleCustomP(i,cbEl){
+  const arr=S.get('custom_problems',[]);arr[i].done=!arr[i].done;S.set('custom_problems',arr);
+  cbEl.innerHTML=arr[i].done?ck():'';
+  cbEl.style.background=arr[i].done?'var(--text)':'';
+  cbEl.style.borderColor=arr[i].done?'var(--text)':'var(--border2)';
+  const row=cbEl.closest('div[style]');
+  if(row)row.style.opacity=arr[i].done?'0.6':'1';
+  // refresh progress bar
+  const lc=S.get('lc_checks');
+  const lcD=DSA_TOPICS.flatMap(t=>t.problems).filter(p=>lc[p.k]).length;
+  const lcT=DSA_TOPICS.flatMap(t=>t.problems).length;
+  const cusD=arr.filter(p=>p.done).length;
+  const lbl=document.getElementById('lc-prog-lbl');
+  const bar=document.getElementById('lc-prog-bar');
+  if(lbl)lbl.textContent=(lcD+cusD)+'/'+(lcT+arr.length)+' ('+(arr.length)+' custom)';
+  if(bar)bar.style.width=((lcD+cusD)/(lcT+arr.length)*100)+'%';
+  updateBadges();
+  toast(arr[i].done?'Solved ✓':'Unmarked');
+}
 function delCustomP(i){const arr=S.get('custom_problems',[]);arr.splice(i,1);S.set('custom_problems',arr);toast('Deleted');dsa(document.getElementById('content'));}
 
 /* ══════════════════════════════
@@ -2352,6 +2456,293 @@ function addCustomReminder(){
 function delCustomReminder(i){
   const ns=getNS(); ns.custom_times.splice(i,1); S.set('notif_settings',ns);
   toast('Removed'); settings(document.getElementById('content'));
+}
+
+
+/* ══════════════════════════════
+   CAREER TARGETS PAGE
+══════════════════════════════ */
+
+const COMPANIES = [
+  // TIER 1
+  {name:'NVIDIA',tier:1,lpa:'₹30–60+ LPA',fit:'🔥 Extremely strong fit — CIRCT/LLVM work directly relevant to compiler/systems roles',
+   stars:5,link:'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite',
+   roles:['Systems Engineer','Software Engineer','CUDA Engineer','Research Engineer'],
+   needs:['DSA (very strong)','Modern C++','OS concepts','Computer Architecture','Linux','Parallel Computing','DSP/ML projects'],
+   mustHave:['C++','DSA','Computer Architecture','Linux'],
+   goodToHave:['CUDA','Parallel Computing','Compiler knowledge'],
+   niceToHave:['MLIR/LLVM','DSP'],
+   color:'green',
+   why:'Your CIRCT/LLVM contributions are directly relevant. NVIDIA hires compiler and systems engineers who know MLIR. This is your strongest differentiator.'},
+  {name:'Google',tier:1,lpa:'₹25–60+ LPA',fit:'Strong fit if DSA is excellent — good projects help',
+   stars:4,link:'https://careers.google.com',
+   roles:['Software Engineer','Research Engineer','Systems Engineer'],
+   needs:['DSA (extremely strong)','OS','DBMS','Computer Networks','OOP','Strong projects'],
+   mustHave:['DSA','OOP','OS'],
+   goodToHave:['Systems knowledge','Open source contributions'],
+   niceToHave:['Research publications','Competitive programming'],
+   color:'blue',
+   why:'Google is DSA-gated. Your OSS work (CIRCT, LFX) is excellent signal. Need 300+ problems and strong problem-solving speed before applying.'},
+  {name:'Jane Street / HRT / Tower',tier:1,lpa:'₹40–80+ LPA',fit:'Possible but requires major shift toward math and competitive programming',
+   stars:2,link:'https://www.janestreet.com/join-jane-street/open-roles/',
+   roles:['Quant Developer','Quant Researcher'],
+   needs:['Elite DSA','Probability','Statistics','Mathematics','Competitive Programming'],
+   mustHave:['CP rating','Probability','Math'],
+   goodToHave:['Algorithmic trading knowledge'],
+   niceToHave:['Research in ML/stats'],
+   color:'amber',
+   why:'Extremely competitive. Requires elite competitive programming and strong math. Not aligned with your current trajectory — skip for now unless you develop a strong interest in quant finance.'},
+  // TIER 2
+  {name:'Qualcomm',tier:2,lpa:'₹20–40 LPA',fit:'🎯 Best single fit for your profile — ECE + DSP + C++ + CIRCT',
+   stars:5,link:'https://careers.qualcomm.com',
+   roles:['DSP Engineer','Systems Engineer','Software Engineer','Compiler Engineer'],
+   needs:['DSP','C++','DSA','Embedded Systems','Signals & Systems'],
+   mustHave:['C++','DSP','DSA'],
+   goodToHave:['RISC-V knowledge','Embedded systems','CIRCT'],
+   niceToHave:['MATLAB','Signal processing projects'],
+   color:'blue',
+   why:'Your LFX RISC-V mentorship and CIRCT work are directly relevant to Qualcomm compiler and systems teams. ECE background + DSP = perfect fit. This should be your primary target.'},
+  {name:'AMD',tier:2,lpa:'₹18–35 LPA',fit:'Strong fit for compiler/systems roles',
+   stars:4,link:'https://careers.amd.com',
+   roles:['Software Engineer','Compiler Engineer','Systems Engineer'],
+   needs:['C++','Computer Architecture','DSA','LLVM knowledge'],
+   mustHave:['C++','DSA','Computer Architecture'],
+   goodToHave:['LLVM/MLIR','GPU architecture'],
+   niceToHave:['OpenCL','Vulkan'],
+   color:'blue',
+   why:'AMD has an active LLVM compiler team. Your CIRCT work gives you a real edge over typical candidates. Strong C++ is non-negotiable.'},
+  {name:'Intel',tier:2,lpa:'₹15–30 LPA',fit:'Good fit for architecture and verification roles',
+   stars:4,link:'https://jobs.intel.com',
+   roles:['Software Engineer','Verification Engineer','Architecture Engineer'],
+   needs:['C/C++','Computer Architecture','Verification basics','DSA'],
+   mustHave:['C++','DSA','Architecture basics'],
+   goodToHave:['RISC-V','Formal verification','HDL'],
+   niceToHave:['CIRCT/MLIR','SystemVerilog'],
+   color:'blue',
+   why:'Intel hires heavily from ECE backgrounds. Your RISC-V LFX mentorship is directly relevant to their architecture teams.'},
+  {name:'Texas Instruments',tier:2,lpa:'₹12–25 LPA',fit:'Excellent ECE company — DSP is core business',
+   stars:5,link:'https://careers.ti.com',
+   roles:['DSP Engineer','Embedded Engineer','Systems Engineer','Application Engineer'],
+   needs:['DSP','Embedded Systems','Digital Electronics','C','MATLAB'],
+   mustHave:['DSP','C/C++','Embedded basics'],
+   goodToHave:['MATLAB','Signal processing','ADC/DAC knowledge'],
+   niceToHave:['Real-time systems','CCS IDE'],
+   color:'amber',
+   why:'TI is the DSP company. Your ECE background, MATLAB, and signal processing experience are perfectly aligned. Very achievable with current skills.'},
+  {name:'Samsung Research India',tier:2,lpa:'₹15–28 LPA',fit:'Good fit for ML/systems roles',
+   stars:4,link:'https://research.samsung.com/sri-b',
+   roles:['Research Engineer','Software Engineer','AI Engineer'],
+   needs:['DSA','ML','Systems','C++'],
+   mustHave:['DSA','Python','ML basics'],
+   goodToHave:['Deep learning','Mobile systems'],
+   niceToHave:['On-device ML','NPU architecture'],
+   color:'green',
+   why:'Samsung Research focuses on AI/ML for mobile. Your ML project experience and Python skills are relevant. Good backup option.'},
+  // TIER 3
+  {name:'GE Vernova / GE Aerospace',tier:3,lpa:'₹10–18 LPA',fit:'Most aligned with current projects — Python, ML, DSP',
+   stars:5,link:'https://jobs.gecareers.com',
+   roles:['Software Engineer','Data Scientist','Systems Engineer','Analytics Engineer'],
+   needs:['DSP','MATLAB','Python','ML'],
+   mustHave:['Python','MATLAB','DSP basics'],
+   goodToHave:['Signal processing','ML pipelines'],
+   niceToHave:['Power systems knowledge'],
+   color:'green',
+   why:'You already applied here. Your sensor fusion, OCR, and ML project background is directly relevant. Strong realistic target even with current skills.'},
+  {name:'Bosch',tier:3,lpa:'₹10–20 LPA',fit:'Good fit for embedded AI roles',
+   stars:4,link:'https://www.bosch.com/careers/',
+   roles:['Software Engineer','Embedded Engineer','AI Engineer'],
+   needs:['Signal Processing','Embedded','C++','AI/ML'],
+   mustHave:['C/C++','Embedded basics'],
+   goodToHave:['AUTOSAR','CAN bus','RTOS'],
+   niceToHave:['Computer vision','Sensor fusion'],
+   color:'green',
+   why:'Your sensor fusion pipeline is directly relevant to Bosch automotive systems. Strong ECE company with good growth.'},
+  {name:'Siemens',tier:3,lpa:'₹10–18 LPA',fit:'Solid for software and automation roles',
+   stars:4,link:'https://www.siemens.com/global/en/company/jobs.html',
+   roles:['Software Engineer','Automation Engineer','Systems Engineer'],
+   needs:['Automation','DSP','Software','C++'],
+   mustHave:['C++','Systems basics'],
+   goodToHave:['PLC','SCADA','Industrial automation'],
+   niceToHave:['Digital twin','Edge computing'],
+   color:'green',
+   why:'Siemens is a strong ECE company with solid campus hiring. Good backup with broad opportunities.'},
+];
+
+const CAREER_ROADMAP = [
+  {priority:1,title:'DSA — 300–400 quality problems',detail:'Arrays, Strings, LL, Trees, Graphs, DP. This unlocks NVIDIA, Google, Qualcomm, AMD. Without this, interviews stall at Round 1.',skills:['LeetCode daily','NeetCode 150 first','Then Striver SDE sheet','Company-wise problems']},
+  {priority:2,title:'Modern C++ depth',detail:'STL, templates, memory management, multithreading basics. Already started — continue with A Tour of C++ and CIRCT codebase.',skills:['A Tour of C++','Effective Modern C++','CppCon Back to Basics','cppreference.com']},
+  {priority:3,title:'Continue CIRCT / LLVM contributions',detail:'This is your biggest differentiator vs other ECE students. Every merged PR increases your credibility for NVIDIA, AMD, Qualcomm compiler roles.',skills:['CIRCT PRs','LFX mentorship','MLIR documentation','LLVM discourse']},
+  {priority:4,title:'OS + Computer Architecture basics',detail:'Required for NVIDIA, Google, AMD, Intel. Cache, pipeline, memory hierarchy, SIMD. One good course covers this.',skills:['OSTEP (free online)','CS:APP book','Architecture: A Quantitative Approach','MIT 6.004 lectures']},
+  {priority:5,title:'Continue DSP / ML projects',detail:'Texas Instruments, Qualcomm DSP teams, GE Vernova care deeply about this. Keep building real signal processing projects.',skills:['Your sensor fusion pipeline','RISC-V ISA extraction','Build one more DSP project','MATLAB → Python transition']},
+  {priority:6,title:'Linux / Systems depth',detail:'Shell scripting, debugging (GDB, Valgrind), build systems (CMake, Bazel), Git advanced. Required everywhere.',skills:['Linux command line','GDB debugging','CMake (already using)','Shell scripting basics']},
+];
+
+function career(c){
+  document.getElementById('topbar-right').innerHTML=`<button class="btn btn-sm btn-primary" onclick="openAddApplication()">+ Track application</button>`;
+
+  // Summary card
+  const summ=document.createElement('div');summ.className='card';
+  summ.innerHTML=`
+    <div class="card-hd" style="margin-bottom:6px"><div class="card-title">Your Career Target Analysis</div><span class="tag tag-b">Based on your profile</span></div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px">
+      <strong style="color:var(--text)">Strengths:</strong> Python · MATLAB · Signal Processing · ML basics · CIRCT/LLVM · LFX Mentorship · RISC-V · OSS experience · ECE background<br>
+      <strong style="color:var(--red)">Gap to close:</strong> DSA/interview preparation · OS fundamentals · Computer Architecture depth
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <span class="tag tag-g">Qualcomm = Best fit</span>
+      <span class="tag tag-g">TI = Most achievable now</span>
+      <span class="tag tag-b">NVIDIA = Dream + achievable</span>
+      <span class="tag tag-y">Google = High reach</span>
+    </div>`;
+  c.appendChild(summ);
+
+  // Application tracker
+  const apps=S.get('applications',[]);
+  if(apps.length){
+    const appCard=document.createElement('div');appCard.className='card';
+    appCard.innerHTML=`<div class="card-hd"><div class="card-title">Application tracker</div></div>`;
+    apps.forEach((app,i)=>{
+      const statusColors={target:'status-target',applied:'status-applied',oa:'status-oa',interview:'status-interview',offer:'status-offer',rejected:'status-rejected'};
+      appCard.innerHTML+=`<div class="application-tracker">
+        <div style="flex:1"><div style="font-size:13px;font-weight:600">${app.company}</div><div style="font-size:11px;color:var(--muted)">${app.role||'—'} · ${app.date||'—'}</div></div>
+        <span class="app-status ${statusColors[app.status]||'status-target'}">${app.status||'target'}</span>
+        <button class="btn-icon" onclick="cycleAppStatus(${i})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg></button>
+        <button class="btn-icon" onclick="delApplication(${i})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+      </div>`;
+    });
+    c.appendChild(appCard);
+  }
+
+  // Tiers
+  [1,2,3].forEach(tier=>{
+    const tierNames={1:'Tier 1 — Dream Targets (₹25–60+ LPA)',2:'Tier 2 — Strong Realistic (₹15–40 LPA)',3:'Tier 3 — Excellent Backup (₹10–20 LPA)'};
+    const tierColors={1:'tier-1',2:'tier-2',3:'tier-3'};
+    const tierBadges={1:'DREAM','TIER 2':'REALISTIC',2:'REALISTIC',3:'BACKUP'};
+
+    const tierHd=document.createElement('div');
+    tierHd.className=`tier-header ${tierColors[tier]}`;
+    tierHd.innerHTML=`<span class="tier-badge">${{1:'DREAM',2:'REALISTIC',3:'BACKUP'}[tier]}</span><span style="font-size:14px;font-weight:600">${tierNames[tier]}</span>`;
+    c.appendChild(tierHd);
+
+    const grid=document.createElement('div');grid.className='company-grid';
+    COMPANIES.filter(co=>co.tier===tier).forEach(co=>{
+      const tracked=S.get('applications',[]).some(a=>a.company===co.name);
+      const card=document.createElement('div');
+      card.className='company-card'+(tracked?' tracked':'');
+      const starsHTML='⭐'.repeat(co.stars)+'☆'.repeat(5-co.stars);
+      const mustChips=co.mustHave.map(s=>`<span class="skill-chip chip-must">${s}</span>`).join('');
+      const goodChips=co.goodToHave.map(s=>`<span class="skill-chip chip-good">${s}</span>`).join('');
+      const niceChips=co.niceToHave.map(s=>`<span class="skill-chip chip-nice">${s}</span>`).join('');
+      const rolesHTML=co.roles.map(r=>`<span class="role-tag">${r}</span>`).join('');
+      card.innerHTML=`
+        <div class="company-name">
+          <a href="${co.link}" target="_blank" style="color:var(--text);text-decoration:none;font-size:14px;font-weight:700">${co.name} ↗</a>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">${co.lpa}</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${co.fit}</div>
+        <div class="company-roles">${rolesHTML}</div>
+        <div class="skills-needed">${mustChips}${goodChips}${niceChips}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;border-top:1px solid var(--border);padding-top:6px">${co.why}</div>
+        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" onclick="quickTrack('${co.name}','${co.roles[0]}')">+ Track</button>
+          <a href="${co.link}" target="_blank" class="btn btn-sm">Careers ↗</a>
+        </div>`;
+      grid.appendChild(card);
+    });
+    c.appendChild(grid);
+  });
+
+  // Skill chips legend
+  const legend=document.createElement('div');
+  legend.className='card';
+  legend.style.marginBottom='16px';
+  legend.innerHTML=`<div class="card-hd"><div class="card-title" style="font-size:12px;color:var(--muted)">Skill requirement legend</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px"><span class="skill-chip chip-must">Must have</span> you need this to get through screening <span class="skill-chip chip-good" style="margin-left:8px">Good to have</span> strengthens your application <span class="skill-chip chip-nice" style="margin-left:8px">Nice to have</span> differentiator</div>`;
+  c.appendChild(legend);
+
+  // 12-month roadmap
+  const rmCard=document.createElement('div');rmCard.className='card';
+  rmCard.innerHTML=`<div class="card-hd"><div class="card-title">12-Month Roadmap</div><span class="tag tag-b">To unlock all tiers</span></div>`;
+  CAREER_ROADMAP.forEach(step=>{
+    const checks=S.get('career_steps',{});
+    const done=!!checks['cs'+step.priority];
+    const div=document.createElement('div');div.className='career-roadmap-step';
+    div.innerHTML=`
+      <div class="step-num" style="${done?'background:var(--green)':''}" onclick="toggleCareerStep(${step.priority},this)">${done?'✓':step.priority}</div>
+      <div class="step-body">
+        <div class="step-title" style="${done?'color:var(--muted);text-decoration:line-through':''}">${step.title}</div>
+        <div class="step-detail">${step.detail}</div>
+        <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">${step.skills.map(s=>`<span class="tag tag-n" style="font-size:10px">${s}</span>`).join('')}</div>
+      </div>`;
+    rmCard.appendChild(div);
+  });
+  c.appendChild(rmCard);
+
+  // Priority order
+  const prioCard=document.createElement('div');prioCard.className='card';
+  prioCard.innerHTML=`
+    <div class="card-hd"><div class="card-title">Optimized priority order</div></div>
+    <div style="font-size:13px;line-height:2;color:var(--muted)">
+      <span style="font-family:var(--mono);color:var(--text);font-weight:700">1.</span> NVIDIA — compiler/systems teams via CIRCT background<br>
+      <span style="font-family:var(--mono);color:var(--text);font-weight:700">2.</span> Qualcomm — DSP + RISC-V + ECE = perfect fit<br>
+      <span style="font-family:var(--mono);color:var(--text);font-weight:700">3.</span> Google — needs strong DSA, longer timeline<br>
+      <span style="font-family:var(--mono);color:var(--text);font-weight:700">4.</span> AMD — LLVM/compiler alignment<br>
+      <span style="font-family:var(--mono);color:var(--text);font-weight:700">5.</span> Texas Instruments — DSP, achievable now<br>
+      <span style="font-family:var(--mono);color:var(--text);font-weight:700">6.</span> Samsung Research — ML/systems backup<br>
+      <span style="font-family:var(--mono);color:var(--text);font-weight:700">7.</span> GE Vernova — most aligned with current projects, PPO possible
+    </div>`;
+  c.appendChild(prioCard);
+}
+
+function toggleCareerStep(num,el){
+  const s=S.get('career_steps',{}); s['cs'+num]=!s['cs'+num]; S.set('career_steps',s);
+  el.textContent=s['cs'+num]?'✓':num;
+  el.style.background=s['cs'+num]?'var(--green)':'';
+  toast(s['cs'+num]?'Step marked done ✓':'Step unmarked');
+}
+
+function quickTrack(company,role){
+  const apps=S.get('applications',[]);
+  if(apps.some(a=>a.company===company)){toast('Already tracking '+company);return;}
+  apps.push({company,role,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),status:'target'});
+  S.set('applications',apps);toast(company+' added to tracker ✓');
+  career(document.getElementById('content'));
+}
+
+const APP_STATUSES=['target','applied','oa','interview','offer','rejected'];
+function cycleAppStatus(i){
+  const apps=S.get('applications',[]);
+  const cur=APP_STATUSES.indexOf(apps[i].status||'target');
+  apps[i].status=APP_STATUSES[(cur+1)%APP_STATUSES.length];
+  S.set('applications',apps);career(document.getElementById('content'));
+}
+function delApplication(i){
+  const apps=S.get('applications',[]);apps.splice(i,1);S.set('applications',apps);
+  toast('Removed');career(document.getElementById('content'));
+}
+
+function openAddApplication(){
+  openModal('Track a company application',`
+    <div class="fg"><label>Company name</label><input id="app-co" placeholder="e.g. NVIDIA"></div>
+    <div class="fg"><label>Role</label><input id="app-role" placeholder="e.g. Systems Engineer"></div>
+    <div class="fg"><label>Status</label>
+      <select id="app-status">
+        <option value="target">Target (planning to apply)</option>
+        <option value="applied">Applied</option>
+        <option value="oa">OA received</option>
+        <option value="interview">Interview scheduled</option>
+        <option value="offer">Offer received 🎉</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+  `,()=>{
+    const co=document.getElementById('app-co').value.trim();
+    if(!co)return toast('Enter company name');
+    const apps=S.get('applications',[]);
+    apps.push({company:co,role:document.getElementById('app-role').value.trim(),status:document.getElementById('app-status').value,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})});
+    S.set('applications',apps);
+    document.getElementById('modal-bg').classList.remove('open');
+    toast('Added ✓');career(document.getElementById('content'));
+  },'Add');
 }
 
 /* ═══════ INIT ═══════ */
