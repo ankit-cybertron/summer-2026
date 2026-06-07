@@ -1952,27 +1952,68 @@ function renderStriverSteps(c){
       const key = stepKey(stepData,p);
       const done = !!checks[key];
       const diffC = p.diff==='Easy'?'var(--green)':p.diff==='Hard'?'var(--red)':'var(--amber)';
-      const useLink = p.xl_link || p.link;
+      // Prefer LC link: xl_link from Excel data > p.link if it's LC > GFG search fallback
+      const rawLink = p.xl_link || p.link || '';
+      const isLC = rawLink.includes('leetcode.com');
+      const isGFG = rawLink.includes('geeksforgeeks') || rawLink.includes('practice.geeks');
+      let useLink;
+      if(isLC){
+        useLink = rawLink;
+      } else if(p.xl_link && p.xl_link.includes('leetcode')){
+        useLink = p.xl_link;
+      } else if(isGFG){
+        // Try to open on LC with a search; fallback to GFG only if no alternative
+        const lcSearch = 'https://leetcode.com/search/?q=' + encodeURIComponent(p.name);
+        useLink = lcSearch;
+      } else {
+        useLink = rawLink || 'https://leetcode.com/search/?q=' + encodeURIComponent(p.name);
+      }
       const coHTML = p.companies&&p.companies.length ? p.companies.slice(0,4).map(co=>`<span class="sr-co">${co.slice(0,3)}</span>`).join('') : '';
       const row = document.createElement('div');
       row.className='striver-row'+(done?' done':'');
-      row.innerHTML=`
-        <div style="display:flex;align-items:center;gap:8px;min-width:0">
-          <div class="cl-cb" style="width:16px;height:16px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;${done?'background:var(--text);border-color:var(--text);':''}">${done?ck():''}</div>
-          <span class="sr-name">${p.name}</span>
-          <span style="font-size:9px;font-weight:700;color:${diffC};flex-shrink:0">${p.diff[0]}</span>
-        </div>
-        <div class="sr-cos">${coHTML}</div>
-        <a href="${useLink}" target="_blank" onclick="event.stopPropagation()" class="sr-link">Solve ↗</a>
-        <div class="cl-cb" style="width:16px;height:16px;border:1.5px solid var(--border2);border-radius:4px;display:flex;align-items:center;justify-content:center;${done?'background:var(--text);border-color:var(--text);':''}">{done?ck():''}</div>`;
-      // use only left checkbox for toggle
-      const leftCb = row.querySelector('.cl-cb:first-of-type');
-      row.onclick = ()=>{
-        const s=S.get('striver_checks'); s[key]=!s[key]; S.set('striver_checks',s);
+      // Build row using DOM to avoid template literal escaping issues
+      // Checkbox
+      const cb=document.createElement('div');
+      cb.className='cl-cb';
+      cb.style.cssText='width:18px;height:18px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;';
+      if(done){cb.innerHTML=ck();cb.style.background='var(--text)';cb.style.borderColor='var(--text)';}
+      // Name + diff
+      const nameWrap=document.createElement('div');
+      nameWrap.style.cssText='display:flex;align-items:center;gap:8px;flex:1;min-width:0;';
+      const nameEl=document.createElement('span');
+      nameEl.className='sr-name';
+      nameEl.textContent=p.name;
+      if(done){nameEl.style.textDecoration='line-through';nameEl.style.color='var(--muted)';}
+      const diffEl=document.createElement('span');
+      diffEl.style.cssText='font-size:9px;font-weight:700;flex-shrink:0;color:'+diffC+';';
+      diffEl.textContent=p.diff[0];
+      nameWrap.appendChild(nameEl);
+      nameWrap.appendChild(diffEl);
+      // Company tags
+      const coDiv=document.createElement('div');
+      coDiv.className='sr-cos';
+      coDiv.innerHTML=coHTML;
+      // Solve link — use xl_link if available (LC), fallback to p.link
+      const solveLink=document.createElement('a');
+      solveLink.href=useLink;
+      solveLink.target='_blank';
+      solveLink.rel='noopener';
+      solveLink.className='sr-link';
+      solveLink.textContent='Solve ↗';
+      solveLink.onclick=e=>e.stopPropagation();
+      row.appendChild(cb);
+      row.appendChild(nameWrap);
+      row.appendChild(coDiv);
+      row.appendChild(solveLink);
+      // Click handler on row
+      row.onclick=()=>{
+        const s=S.get('striver_checks');s[key]=!s[key];S.set('striver_checks',s);
         row.classList.toggle('done',s[key]);
-        row.querySelectorAll('.cl-cb').forEach(cb=>{cb.innerHTML=s[key]?ck():'';cb.style.background=s[key]?'var(--text)':'';cb.style.borderColor=s[key]?'var(--text)':'var(--border2)';});
-        row.querySelector('.sr-name').style.textDecoration=s[key]?'line-through':'none';
-        row.querySelector('.sr-name').style.color=s[key]?'var(--muted)':'';
+        cb.innerHTML=s[key]?ck():'';
+        cb.style.background=s[key]?'var(--text)':'';
+        cb.style.borderColor=s[key]?'var(--text)':'var(--border2)';
+        nameEl.style.textDecoration=s[key]?'line-through':'none';
+        nameEl.style.color=s[key]?'var(--muted)':'';
         updateStriverBadge();
         toast(s[key]?'Marked done ✓':'Unmarked');
       };
